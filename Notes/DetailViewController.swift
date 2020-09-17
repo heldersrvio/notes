@@ -8,23 +8,34 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
-
+class DetailViewController: UIViewController, UITextViewDelegate {
+    @IBOutlet weak var textView: UITextView!
+    var noteId: String = UUID().uuidString
+    var addNoteToTableView: ((String, String) -> Void)!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        textView.textContainerInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 35)
+        textView.delegate = self
 
-        // Do any additional setup after loading the view.
+        if let bgImage = UIImage(named: "background.png") {
+            view.backgroundColor = UIColor(patternImage: bgImage)
+            navigationController?.toolbar.barTintColor = UIColor(patternImage: bgImage)
+        }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func textViewDidEndEditing(_ textView: UITextView) {
+        let ud = UserDefaults()
+        if !textView.text.isEmpty {
+            ud.set(textView.text, forKey: noteId)
+            let components = textView.text.components(separatedBy: "\n").filter{$0 != "\n"}
+            if let title = components.first {
+                let subtitle = components[1...components.count - 1].joined(separator: " ")
+                addNoteToTableView(title, subtitle)
+            }
+        } else {
+            ud.removeObject(forKey: noteId)
+        }
     }
-    */
-
 }

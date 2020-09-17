@@ -34,6 +34,8 @@ class FoldersViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(edit))
         navigationItem.rightBarButtonItem?.tintColor = UIColor(red: 0.88, green: 0.67, blue: 0, alpha: 1)
         
+        tableView.tableFooterView = UIView()
+        
         let ud = UserDefaults()
         folderNames = ud.stringArray(forKey: "folders") ?? []
         
