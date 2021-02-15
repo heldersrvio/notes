@@ -31,7 +31,7 @@ class DetailViewController: UIViewController, UITextViewDelegate {
             ud.set(textView.text, forKey: noteId)
             let components = textView.text.components(separatedBy: "\n").filter{$0 != "\n"}
             if let title = components.first {
-                let subtitle = components[1...components.count - 1].joined(separator: " ")
+                let subtitle = components.count > 1 ? components[1...components.count - 1].joined(separator: " ") : ""
                 addNoteToTableView(title, subtitle)
             }
         } else {

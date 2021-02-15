@@ -11,8 +11,16 @@ import UIKit
 class NotesViewController: UITableViewController {
     
     var folderName: String!
-    var noteTitles: [String] = []
-    var noteSubtitles: [String] = []
+    var noteTitles: [String] = [] {
+        didSet {
+            saveTitles()
+        }
+    }
+    var noteSubtitles: [String] = [] {
+        didSet {
+            saveSubtitles()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,8 +34,8 @@ class NotesViewController: UITableViewController {
         let ud = UserDefaults()
         
         if let folderName = folderName {
-            noteTitles.append(contentsOf: ud.stringArray(forKey: "\(folderName)Titles") ?? [])
-            noteSubtitles.append(contentsOf: ud.stringArray(forKey: "\(folderName)Subtitles") ?? [])
+            noteTitles = ud.stringArray(forKey: "\(folderName)Titles") ?? []
+            noteSubtitles = ud.stringArray(forKey: "\(folderName)Subtitles") ?? []
         }
         
         navigationController?.setToolbarHidden(false, animated: false)
@@ -53,6 +61,7 @@ class NotesViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             noteTitles.remove(at: indexPath.row)
+            noteSubtitles.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
@@ -61,14 +70,23 @@ class NotesViewController: UITableViewController {
         guard let dvc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController else { return }
         dvc.addNoteToTableView = {
             [weak self] (title, subtitle) in
-            self?.noteTitles.append(title)
             self?.noteSubtitles.append(subtitle)
-            if let count = self?.noteTitles.count {
+            self?.noteTitles.append(title)
+            if let count = self?.noteSubtitles.count {
                 self?.tableView.insertRows(at: [IndexPath(row: count - 1, section: 0)], with: .automatic)
             }
         }
         navigationController?.pushViewController(dvc, animated: true)
     }
     
+    func saveTitles() {
+        let ud = UserDefaults()
+        ud.set(noteTitles, forKey: "\(folderName!)Titles")
+    }
+    
+    func saveSubtitles() {
+        let ud = UserDefaults()
+        ud.set(noteSubtitles, forKey: "\(folderName!)Subtitles")
+    }
     
 }
