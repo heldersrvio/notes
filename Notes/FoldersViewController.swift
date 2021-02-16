@@ -25,7 +25,7 @@ class FoldersViewController: UITableViewController {
         }
         navigationController?.setToolbarHidden(false, animated: false)
         navigationController?.toolbar.layer.borderWidth = 0
-        setToolbarItems([UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "New Folder", style: .plain, target: self, action: #selector(addNewFolder))], animated: false)
+        setToolbarItems([UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .plain, target: self, action: #selector(addNewFolder))], animated: false)
         toolbarItems?.forEach{$0.tintColor = UIColor(red: 0.88, green: 0.67, blue: 0, alpha: 1) }
         
         navigationItem.title = "Folders"
@@ -87,10 +87,26 @@ class FoldersViewController: UITableViewController {
         return folderNames.count
     }
     
+    func addEditButton(to cell: UITableViewCell) -> UIButton {
+        let cellEditButton = UIButton(frame: CGRect.zero)
+        cellEditButton.translatesAutoresizingMaskIntoConstraints = false
+        cell.addSubview(cellEditButton)
+        cell.accessoryView = cellEditButton
+        cellEditButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
+        cellEditButton.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
+        cellEditButton.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -35).isActive = true
+        cellEditButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        return cellEditButton
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FolderCell", for: indexPath)
         cell.textLabel?.text = folderNames[indexPath.row]
         cell.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+        let cellEditButton = addEditButton(to: cell)
+        if editingMode {
+            cellEditButton.isHidden = false
+        }
         return cell
     }
 
