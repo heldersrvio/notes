@@ -10,12 +10,21 @@ import UIKit
 
 class FoldersViewController: UITableViewController {
     var newFolderAlert: UIAlertController?
-    var folderNames: [String] = [] {
+    var folderIds: [Int] = [] {
         didSet {
-            saveInfo()
+            saveIds()
         }
     }
-    var editingMode = false
+    var folderNames: [String] = [] {
+        didSet {
+            saveNames()
+        }
+    }
+    var editingMode = false {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +47,11 @@ class FoldersViewController: UITableViewController {
         
         let ud = UserDefaults()
         folderNames = ud.stringArray(forKey: "folders") ?? []
-        
+        if let folderIds = ud.array(forKey: "folderIds") as? [Int] {
+            self.folderIds = folderIds
+        } else {
+            self.folderIds = []
+        }
     }
     
     @objc func edit() {
@@ -58,6 +71,7 @@ class FoldersViewController: UITableViewController {
             [weak self] action in
             if let text = self?.newFolderAlert?.textFields?.first?.text {
                 self?.folderNames.append(text)
+                self?.folderIds.append(UUID().hashValue)
                 if let count = self?.folderNames.count {
                     self?.tableView.insertRows(at: [IndexPath(row: count - 1, section: 0)], with: .automatic)
                 }
@@ -83,18 +97,29 @@ class FoldersViewController: UITableViewController {
         newFolderAlert?.actions[1].isEnabled = count > 0
     }
     
+    @objc func openFolderOptionsMenu(sender: UIButton) {
+        let ac = UIAlertController(title: folderNames[sender.tag], message: nil, preferredStyle: .actionSheet)
+        ac.addAction(UIAlertAction(title: "Share Folder", style: .default))
+        ac.addAction(UIAlertAction(title: "Add Folder", style: .default))
+        ac.addAction(UIAlertAction(title: "Rename", style: .default))
+        ac.addAction(UIAlertAction(title: "Delete", style: .default))
+        present(ac, animated: true)
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return folderNames.count
     }
     
-    func addEditButton(to cell: UITableViewCell) -> UIButton {
+    func addEditButton(to cell: UITableViewCell, of index: Int) -> UIButton {
         let cellEditButton = UIButton(frame: CGRect.zero)
         cellEditButton.translatesAutoresizingMaskIntoConstraints = false
         cell.addSubview(cellEditButton)
         cell.accessoryView = cellEditButton
+        cellEditButton.tag = index
         cellEditButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
+        cellEditButton.addTarget(self, action: #selector(openFolderOptionsMenu), for: .touchUpInside)
         cellEditButton.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
-        cellEditButton.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -35).isActive = true
+        cellEditButton.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -10).isActive = true
         cellEditButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         return cellEditButton
     }
@@ -103,9 +128,11 @@ class FoldersViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FolderCell", for: indexPath)
         cell.textLabel?.text = folderNames[indexPath.row]
         cell.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
-        let cellEditButton = addEditButton(to: cell)
+        let cellEditButton = addEditButton(to: cell, of: indexPath.row)
         if editingMode {
             cellEditButton.isHidden = false
+        } else {
+            cellEditButton.isHidden = true
         }
         return cell
     }
@@ -113,6 +140,7 @@ class FoldersViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             folderNames.remove(at: indexPath.row)
+            folderIds.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
@@ -131,6 +159,7 @@ class FoldersViewController: UITableViewController {
             vc.deleteFolder = {
                 [weak self] in
                 self?.folderNames.remove(at: indexPath.row)
+                self?.folderIds.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             }
             vc.modalPresentationStyle = .pageSheet
@@ -138,13 +167,19 @@ class FoldersViewController: UITableViewController {
         } else {
             guard let nvc = storyboard?.instantiateViewController(withIdentifier: "Notes") as? NotesViewController else { return }
             nvc.folderName = folderNames[indexPath.row]
+            nvc.folderId = folderIds[indexPath.row]
             navigationController?.pushViewController(nvc, animated: true)
         }
     }
     
-    func saveInfo() {
+    func saveNames() {
         let ud = UserDefaults()
         ud.set(folderNames, forKey: "folders")
+    }
+    
+    func saveIds() {
+        let ud = UserDefaults()
+        ud.set(folderIds, forKey: "folderIds")
     }
 
 }

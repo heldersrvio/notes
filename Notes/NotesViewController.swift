@@ -10,6 +10,7 @@ import UIKit
 
 class NotesViewController: UITableViewController {
     
+    var folderId: Int!
     var folderName: String!
     var noteTitles: [String] = [] {
         didSet {
@@ -33,9 +34,9 @@ class NotesViewController: UITableViewController {
         
         let ud = UserDefaults()
         
-        if let folderName = folderName {
-            noteTitles = ud.stringArray(forKey: "\(folderName)Titles") ?? []
-            noteSubtitles = ud.stringArray(forKey: "\(folderName)Subtitles") ?? []
+        if let folderId = folderId {
+            noteTitles = ud.stringArray(forKey: "\(folderId)Titles") ?? []
+            noteSubtitles = ud.stringArray(forKey: "\(folderId)Subtitles") ?? []
         }
         
         navigationController?.setToolbarHidden(false, animated: false)
@@ -81,12 +82,12 @@ class NotesViewController: UITableViewController {
     
     func saveTitles() {
         let ud = UserDefaults()
-        ud.set(noteTitles, forKey: "\(folderName!)Titles")
+        ud.set(noteTitles, forKey: "\(folderId!)Titles")
     }
     
     func saveSubtitles() {
         let ud = UserDefaults()
-        ud.set(noteSubtitles, forKey: "\(folderName!)Subtitles")
+        ud.set(noteSubtitles, forKey: "\(folderId!)Subtitles")
     }
     
 }
