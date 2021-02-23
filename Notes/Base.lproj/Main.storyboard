@@ -98,6 +98,35 @@
             </objects>
             <point key="canvasLocation" x="2676.811594202899" y="101.78571428571428"/>
         </scene>
+        <!--Folder Menu View Controller-->
+        <scene sceneID="STJ-bz-QOQ">
+            <objects>
+                <tableViewController restorationIdentifier="folderMenu" storyboardIdentifier="folderMenu" id="Ca3-uP-ywA" customClass="FolderMenuViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="t6O-Ai-tEe">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="FolderMenuCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FolderMenuCell" id="rUo-rm-lzy">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rUo-rm-lzy" id="pyq-Jg-VCY">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Ca3-uP-ywA" id="X5S-Mp-OMU"/>
+                            <outlet property="delegate" destination="Ca3-uP-ywA" id="bHK-e0-fvc"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="id9-Ta-LVB"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fUY-80-VYB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4228.985507246377" y="962.94642857142856"/>
+        </scene>
         <!--Detail View Controller-->
         <scene sceneID="4xq-Xf-3Q5">
             <objects>
@@ -213,6 +242,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GPy-5F-oUJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5194.202898550725" y="99.776785714285708"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="wnI-do-Mc7">
+            <objects>
+                <navigationController restorationIdentifier="folderMenuNavigationController" storyboardIdentifier="folderMenuNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="oHT-ev-FU1" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1kS-Ez-J6T">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Ca3-uP-ywA" kind="relationship" relationship="rootViewController" id="V5w-Kr-CQl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="49Q-Uy-rYs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3318.840579710145" y="962.94642857142856"/>
         </scene>
     </scenes>
     <resources>

@@ -16,6 +16,7 @@
 		9A7DC3C324F94C5400B069FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A7DC3C124F94C5400B069FF /* LaunchScreen.storyboard */; };
 		9A7DC3CB24F94DAF00B069FF /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7DC3CA24F94DAF00B069FF /* NotesViewController.swift */; };
 		9A7DC3CD24F94DD400B069FF /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7DC3CC24F94DD400B069FF /* DetailViewController.swift */; };
+		9A93F5EB25E5343900077E89 /* FolderMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A93F5EA25E5343900077E89 /* FolderMenuViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		9A7DC3C424F94C5400B069FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A7DC3CA24F94DAF00B069FF /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		9A7DC3CC24F94DD400B069FF /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		9A93F5EA25E5343900077E89 /* FolderMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderMenuViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				9A7DC3BF24F94C5400B069FF /* Assets.xcassets */,
 				9A7DC3C124F94C5400B069FF /* LaunchScreen.storyboard */,
 				9A7DC3C424F94C5400B069FF /* Info.plist */,
+				9A93F5EA25E5343900077E89 /* FolderMenuViewController.swift */,
 			);
 			path = Notes;
 			sourceTree = "<group>";
@@ -147,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A93F5EB25E5343900077E89 /* FolderMenuViewController.swift in Sources */,
 				9A7DC3CB24F94DAF00B069FF /* NotesViewController.swift in Sources */,
 				9A7DC3BB24F94C4F00B069FF /* FoldersViewController.swift in Sources */,
 				9A10D9BD250E29C30057AFBA /* RenameViewController.swift in Sources */,

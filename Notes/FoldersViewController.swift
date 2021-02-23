@@ -98,12 +98,13 @@ class FoldersViewController: UITableViewController {
     }
     
     @objc func openFolderOptionsMenu(sender: UIButton) {
-        let ac = UIAlertController(title: folderNames[sender.tag], message: nil, preferredStyle: .actionSheet)
-        ac.addAction(UIAlertAction(title: "Share Folder", style: .default))
-        ac.addAction(UIAlertAction(title: "Add Folder", style: .default))
-        ac.addAction(UIAlertAction(title: "Rename", style: .default))
-        ac.addAction(UIAlertAction(title: "Delete", style: .default))
-        present(ac, animated: true)
+        if let folderMenuNVC = storyboard?.instantiateViewController(withIdentifier: "folderMenuNavigationController") as? UINavigationController {
+            folderMenuNVC.modalPresentationStyle = .popover
+            if let folderMenuVC = folderMenuNVC.topViewController as? FolderMenuViewController {
+                folderMenuVC.folderName = folderNames[sender.tag]
+            }
+            present(folderMenuNVC, animated: true)
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
