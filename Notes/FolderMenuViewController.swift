@@ -10,11 +10,16 @@ import UIKit
 
 class FolderMenuViewController: UITableViewController, UINavigationBarDelegate {
     var folderName: String!
-    let options = ["Share Folder", "Add Folder", "Move This Folder", "Rename", "Delete"]
+    var index: Int!
+    var addFolder: (() -> Void)!
+    var renameFolder: ((Int) -> Void)!
+    var deleteFolder: ((Int) -> Void)!
+    let options = ["Add Folder", "Rename", "Delete"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = folderName
+        tableView.tableFooterView = UIView()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -26,5 +31,16 @@ class FolderMenuViewController: UITableViewController, UINavigationBarDelegate {
         cell.textLabel?.text = options[indexPath.row]
         return cell
     }
-
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        dismiss(animated: true)
+        switch indexPath.row {
+        case 0:
+            addFolder()
+        case 1:
+            renameFolder(index)
+        default:
+            deleteFolder(index)
+        }
+    }
 }

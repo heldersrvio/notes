@@ -10,6 +10,7 @@ import UIKit
 
 class FoldersViewController: UITableViewController {
     var newFolderAlert: UIAlertController?
+    var renameFolderAlert: UIAlertController?
     var folderIds: [Int] = [] {
         didSet {
             saveIds()
@@ -79,7 +80,9 @@ class FoldersViewController: UITableViewController {
         }
         newFolderAlert?.addTextField { (textField) in
             textField.placeholder = "Name"
+            textField.tintColor = UIColor(red: 0.88, green: 0.67, blue: 0, alpha: 1)
             textField.addTarget(self, action: #selector(self.enableDisableNewFolderSave(_:)), for: .editingChanged)
+            textField.becomeFirstResponder()
         }
         
         newFolderAlert?.addAction(UIAlertAction(title: "Cancel", style: .default))
@@ -92,9 +95,46 @@ class FoldersViewController: UITableViewController {
         
     }
     
+    @objc func renameFolder(of index: Int) {
+        renameFolderAlert = UIAlertController(title: "Rename Folder", message: nil, preferredStyle: .alert)
+        let saveAction = UIAlertAction(title: "Save", style: .default) {
+            [weak self] action in
+            if let text = self?.renameFolderAlert?.textFields?.first?.text {
+                self?.folderNames[index] = text
+                self?.tableView.reloadData()
+            }
+        }
+        renameFolderAlert?.addTextField { (textField) in
+            textField.placeholder = "Name"
+            textField.text = self.folderNames[index]
+            textField.tintColor = UIColor(red: 0.88, green: 0.67, blue: 0, alpha: 1)
+            textField.addTarget(self, action: #selector(self.enableDisableRenameFolderSave(_:)), for: .editingChanged)
+        }
+        
+        renameFolderAlert?.addAction(UIAlertAction(title: "Cancel", style: .default))
+        renameFolderAlert?.addAction(saveAction)
+        saveAction.isEnabled = false
+        renameFolderAlert?.actions.forEach{$0.setValue(UIColor(red: 0.88, green: 0.67, blue: 0, alpha: 1), forKey: "titleTextColor")}
+        if let ac = renameFolderAlert {
+            present(ac, animated: true)
+        }
+        
+    }
+    
+    @objc func deleteFolder(of index: Int) {
+        folderNames.remove(at: index)
+        folderIds.remove(at: index)
+        tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+    }
+    
     @objc func enableDisableNewFolderSave(_ sender: UITextField) {
         guard let count = sender.text?.count else { return }
         newFolderAlert?.actions[1].isEnabled = count > 0
+    }
+    
+    @objc func enableDisableRenameFolderSave(_ sender: UITextField) {
+        guard let count = sender.text?.count else { return }
+        renameFolderAlert?.actions[1].isEnabled = count > 0
     }
     
     @objc func openFolderOptionsMenu(sender: UIButton) {
@@ -102,6 +142,10 @@ class FoldersViewController: UITableViewController {
             folderMenuNVC.modalPresentationStyle = .popover
             if let folderMenuVC = folderMenuNVC.topViewController as? FolderMenuViewController {
                 folderMenuVC.folderName = folderNames[sender.tag]
+                folderMenuVC.index = sender.tag
+                folderMenuVC.addFolder = addNewFolder
+                folderMenuVC.renameFolder = renameFolder(of:)
+                folderMenuVC.deleteFolder = deleteFolder(of:)
             }
             present(folderMenuNVC, animated: true)
         }
@@ -147,25 +191,7 @@ class FoldersViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if editingMode {
-            guard let nav = storyboard?.instantiateViewController(withIdentifier: "RenameNav") as? UINavigationController else { return }
-            guard let vc = nav.topViewController as? RenameViewController else { return }
-            
-            vc.name = folderNames[indexPath.row]
-            vc.saveName = {
-                [weak self] (name) in
-                self?.folderNames[indexPath.row] = name
-                tableView.reloadData()
-            }
-            vc.deleteFolder = {
-                [weak self] in
-                self?.folderNames.remove(at: indexPath.row)
-                self?.folderIds.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-            }
-            vc.modalPresentationStyle = .pageSheet
-            present(nav, animated: true)
-        } else {
+        if !editingMode {
             guard let nvc = storyboard?.instantiateViewController(withIdentifier: "Notes") as? NotesViewController else { return }
             nvc.folderName = folderNames[indexPath.row]
             nvc.folderId = folderIds[indexPath.row]
