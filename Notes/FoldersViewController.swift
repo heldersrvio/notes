@@ -9,6 +9,7 @@
 import UIKit
 
 class FoldersViewController: UITableViewController {
+    
     var newFolderAlert: UIAlertController?
     var renameFolderAlert: UIAlertController?
     var folderIds: [Int] = [] {
@@ -139,7 +140,8 @@ class FoldersViewController: UITableViewController {
     
     @objc func openFolderOptionsMenu(sender: UIButton) {
         if let folderMenuNVC = storyboard?.instantiateViewController(withIdentifier: "folderMenuNavigationController") as? UINavigationController {
-            folderMenuNVC.modalPresentationStyle = .popover
+            folderMenuNVC.modalPresentationStyle = .formSheet
+            folderMenuNVC.preferredContentSize = CGSize(width: 100, height: 100)
             if let folderMenuVC = folderMenuNVC.topViewController as? FolderMenuViewController {
                 folderMenuVC.folderName = folderNames[sender.tag]
                 folderMenuVC.index = sender.tag
