@@ -8,10 +8,11 @@
 
 import UIKit
 
-class FoldersViewController: UITableViewController {
+class FoldersViewController: UITableViewController, UISearchBarDelegate {
     
     var newFolderAlert: UIAlertController?
     var renameFolderAlert: UIAlertController?
+    var searchBar = UISearchBar()
     var folderIds: [Int] = [] {
         didSet {
             saveIds()
@@ -30,6 +31,12 @@ class FoldersViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchBar.searchBarStyle = .minimal
+        searchBar.placeholder = "Search"
+        searchBar.sizeToFit()
+        searchBar.delegate = self
+        
         if let bgImage = UIImage(named: "background.png") {
             view.backgroundColor = UIColor(patternImage: bgImage)
             navigationController?.toolbar.barTintColor = UIColor(patternImage: bgImage)
@@ -45,6 +52,7 @@ class FoldersViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(edit))
         navigationItem.rightBarButtonItem?.tintColor = UIColor(red: 0.88, green: 0.67, blue: 0, alpha: 1)
         
+        tableView.tableHeaderView = searchBar
         tableView.tableFooterView = UIView()
         
         let ud = UserDefaults()
@@ -198,6 +206,31 @@ class FoldersViewController: UITableViewController {
             nvc.folderName = folderNames[indexPath.row]
             nvc.folderId = folderIds[indexPath.row]
             navigationController?.pushViewController(nvc, animated: true)
+        }
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        tableView.tableHeaderView = nil
+        navigationItem.titleView = searchBar
+        navigationController?.toolbar.barTintColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        if let titleViewFrame = navigationItem.titleView?.frame {
+            let bottomBorder: CALayer = CALayer()
+            bottomBorder.frame = CGRect(x: titleViewFrame.minX, y: titleViewFrame.maxY, width: titleViewFrame.width, height: 1)
+            bottomBorder.backgroundColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1).cgColor
+            navigationItem.titleView?.layer.addSublayer(bottomBorder)
+        }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelSearching))
+        view.backgroundColor = UIColor(red: 0.83, green: 0.83, blue: 0.83, alpha: 1)
+    }
+    
+    @objc func cancelSearching() {
+        tableView.tableHeaderView = nil
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(edit))
+        navigationItem.titleView = UIView()
+        navigationItem.titleView?.layer.borderWidth = 0
+        if let bgImage = UIImage(named: "background.png") {
+            view.backgroundColor = UIColor(patternImage: bgImage)
+            navigationController?.toolbar.barTintColor = UIColor(patternImage: bgImage)
         }
     }
     
