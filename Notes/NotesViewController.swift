@@ -22,6 +22,11 @@ class NotesViewController: UITableViewController {
             saveSubtitles()
         }
     }
+    var noteIds: [String] = [] {
+        didSet {
+            saveIds()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +42,7 @@ class NotesViewController: UITableViewController {
         if let folderId = folderId {
             noteTitles = ud.stringArray(forKey: "\(folderId)Titles") ?? []
             noteSubtitles = ud.stringArray(forKey: "\(folderId)Subtitles") ?? []
+            noteIds = ud.stringArray(forKey: "\(folderId)NoteIds") ?? []
         }
         
         navigationController?.setToolbarHidden(false, animated: false)
@@ -59,6 +65,21 @@ class NotesViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let dvc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController else { return }
+        dvc.addNoteToTableView = {
+            [weak self] (title, subtitle) in
+            let id = UUID().uuidString
+            self?.noteSubtitles.append(subtitle)
+            self?.noteTitles.append(title)
+            self?.noteIds.append(id)
+            if let count = self?.noteSubtitles.count {
+                self?.tableView.insertRows(at: [IndexPath(row: count - 1, section: 0)], with: .automatic)
+            }
+        }
+        
+    }
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             noteTitles.remove(at: indexPath.row)
@@ -71,8 +92,10 @@ class NotesViewController: UITableViewController {
         guard let dvc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController else { return }
         dvc.addNoteToTableView = {
             [weak self] (title, subtitle) in
+            let id = UUID().uuidString
             self?.noteSubtitles.append(subtitle)
             self?.noteTitles.append(title)
+            self?.noteIds.append(id)
             if let count = self?.noteSubtitles.count {
                 self?.tableView.insertRows(at: [IndexPath(row: count - 1, section: 0)], with: .automatic)
             }
@@ -88,6 +111,11 @@ class NotesViewController: UITableViewController {
     func saveSubtitles() {
         let ud = UserDefaults()
         ud.set(noteSubtitles, forKey: "\(folderId!)Subtitles")
+    }
+    
+    func saveIds() {
+        let ud = UserDefaults()
+        ud.set(noteIds, forKey: "\(folderId!)NoteIds")
     }
     
 }

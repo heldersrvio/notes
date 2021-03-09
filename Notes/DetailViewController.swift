@@ -10,12 +10,15 @@ import UIKit
 
 class DetailViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var textView: UITextView!
-    var noteId: String = UUID().uuidString
+    var noteId: String!
     var addNoteToTableView: ((String, String) -> Void)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let text = UserDefaults().string(forKey: noteId) {
+            textView.text = text
+        }
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 35)
         textView.delegate = self
 
