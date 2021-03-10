@@ -135,9 +135,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Wuw-Jz-ZLm">
-                                <rect key="frame" x="0.0" y="44" width="414" height="808"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Wuw-Jz-ZLm">
+                                <rect key="frame" x="13" y="57" width="388" height="783"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -145,6 +144,12 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8GE-qw-OJj"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="8GE-qw-OJj" firstAttribute="trailing" secondItem="Wuw-Jz-ZLm" secondAttribute="trailing" constant="13" id="7Ge-Ue-kKa"/>
+                            <constraint firstItem="Wuw-Jz-ZLm" firstAttribute="leading" secondItem="8GE-qw-OJj" secondAttribute="leading" constant="13" id="ORe-Zi-tnv"/>
+                            <constraint firstItem="8GE-qw-OJj" firstAttribute="bottom" secondItem="Wuw-Jz-ZLm" secondAttribute="bottom" constant="22" id="n7n-Op-BgO"/>
+                            <constraint firstItem="Wuw-Jz-ZLm" firstAttribute="top" secondItem="8GE-qw-OJj" secondAttribute="top" constant="13" id="rsB-dP-SVP"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="textView" destination="Wuw-Jz-ZLm" id="gNW-6l-BJd"/>

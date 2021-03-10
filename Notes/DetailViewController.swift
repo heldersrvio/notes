@@ -11,15 +11,15 @@ import UIKit
 class DetailViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var textView: UITextView!
     var noteId: String!
-    var addNoteToTableView: ((String, String) -> Void)!
+    var addNoteToTableView: (() -> Void)!
+    var removeNoteFromTableView: (() -> Void)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let text = UserDefaults().string(forKey: noteId) {
+        if let text = UserDefaults().string(forKey: "\(noteId!)Note") {
             textView.text = text
         }
-        textView.textContainerInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 35)
         textView.delegate = self
 
         if let bgImage = UIImage(named: "background.png") {
@@ -30,15 +30,18 @@ class DetailViewController: UIViewController, UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         let ud = UserDefaults()
-        if !textView.text.isEmpty {
-            ud.set(textView.text, forKey: noteId)
-            let components = textView.text.components(separatedBy: "\n").filter{$0 != "\n"}
-            if let title = components.first {
-                let subtitle = components.count > 1 ? components[1...components.count - 1].joined(separator: " ") : ""
-                addNoteToTableView(title, subtitle)
+        if let _ = ud.string(forKey: "\(noteId!)Note") {
+            if !textView.text.isEmpty {
+                ud.set(textView.text, forKey: "\(noteId!)Note")
+            } else {
+                ud.removeObject(forKey: "\(noteId!)Note")
+                removeNoteFromTableView()
             }
         } else {
-            ud.removeObject(forKey: noteId)
+            if !textView.text.isEmpty {
+                ud.set(textView.text, forKey: "\(noteId!)Note")
+                addNoteToTableView()
+            }
         }
     }
 }

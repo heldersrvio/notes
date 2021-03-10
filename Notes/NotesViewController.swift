@@ -12,20 +12,15 @@ class NotesViewController: UITableViewController {
     
     var folderId: Int!
     var folderName: String!
-    var noteTitles: [String] = [] {
-        didSet {
-            saveTitles()
-        }
-    }
-    var noteSubtitles: [String] = [] {
-        didSet {
-            saveSubtitles()
-        }
-    }
     var noteIds: [String] = [] {
         didSet {
             saveIds()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
 
     override func viewDidLoad() {
@@ -40,8 +35,6 @@ class NotesViewController: UITableViewController {
         let ud = UserDefaults()
         
         if let folderId = folderId {
-            noteTitles = ud.stringArray(forKey: "\(folderId)Titles") ?? []
-            noteSubtitles = ud.stringArray(forKey: "\(folderId)Subtitles") ?? []
             noteIds = ud.stringArray(forKey: "\(folderId)NoteIds") ?? []
         }
         
@@ -54,63 +47,71 @@ class NotesViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return noteTitles.count
+        return noteIds.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NotesCell", for: indexPath)
-        cell.textLabel?.text = noteTitles[indexPath.row]
-        cell.detailTextLabel?.text = noteSubtitles[indexPath.row]
+        let ud = UserDefaults()
+        if let noteText = ud.string(forKey: "\(noteIds[indexPath.row])Note") {
+            let noteTextComponents = noteText.components(separatedBy: "\n")
+            if let noteTitle = noteTextComponents.first {
+                cell.textLabel?.text = noteTitle
+            }
+            if noteTextComponents.count > 1 {
+                cell.detailTextLabel?.text = noteTextComponents[1...noteTextComponents.count - 1].joined(separator: "\n")
+            } else {
+                cell.detailTextLabel?.text = ""
+            }
+        }
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let dvc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController else { return }
+        dvc.noteId = noteIds[indexPath.row]
         dvc.addNoteToTableView = {
-            [weak self] (title, subtitle) in
-            let id = UUID().uuidString
-            self?.noteSubtitles.append(subtitle)
-            self?.noteTitles.append(title)
-            self?.noteIds.append(id)
-            if let count = self?.noteSubtitles.count {
+            [weak self] in
+            self?.noteIds.append(dvc.noteId)
+            if let count = self?.noteIds.count {
                 self?.tableView.insertRows(at: [IndexPath(row: count - 1, section: 0)], with: .automatic)
             }
         }
+        dvc.removeNoteFromTableView = {
+            [weak self] in
+            self?.noteIds.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+        navigationController?.pushViewController(dvc, animated: true)
         
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            noteTitles.remove(at: indexPath.row)
-            noteSubtitles.remove(at: indexPath.row)
+            noteIds.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
     
     @objc func newNote() {
         guard let dvc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController else { return }
+        dvc.noteId = UUID().uuidString
         dvc.addNoteToTableView = {
-            [weak self] (title, subtitle) in
-            let id = UUID().uuidString
-            self?.noteSubtitles.append(subtitle)
-            self?.noteTitles.append(title)
-            self?.noteIds.append(id)
-            if let count = self?.noteSubtitles.count {
+            [weak self] in
+            self?.noteIds.append(dvc.noteId)
+            if let count = self?.noteIds.count {
                 self?.tableView.insertRows(at: [IndexPath(row: count - 1, section: 0)], with: .automatic)
             }
         }
+        dvc.removeNoteFromTableView = {
+            [weak self] in
+            if let count = self?.noteIds.count {
+                self?.noteIds.remove(at: count - 1)
+                self?.tableView.deleteRows(at: [IndexPath(row: count - 1, section: 1)], with: .automatic)
+            }
+        }
         navigationController?.pushViewController(dvc, animated: true)
-    }
-    
-    func saveTitles() {
-        let ud = UserDefaults()
-        ud.set(noteTitles, forKey: "\(folderId!)Titles")
-    }
-    
-    func saveSubtitles() {
-        let ud = UserDefaults()
-        ud.set(noteSubtitles, forKey: "\(folderId!)Subtitles")
     }
     
     func saveIds() {
