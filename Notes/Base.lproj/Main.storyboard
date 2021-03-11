@@ -159,59 +159,6 @@
             </objects>
             <point key="canvasLocation" x="3444.9275362318845" y="101.78571428571428"/>
         </scene>
-        <!--Rename View Controller-->
-        <scene sceneID="ZLy-fj-tb3">
-            <objects>
-                <viewController restorationIdentifier="Rename" storyboardIdentifier="Rename" id="cD9-on-bVh" customClass="RenameViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="0U9-sO-osI">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KB1-Mu-78y">
-                                <rect key="frame" x="0.0" y="214" width="414" height="56"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="414" id="IlJ-sq-buK"/>
-                                    <constraint firstAttribute="height" constant="56" id="Rwa-yd-zUX"/>
-                                </constraints>
-                                <state key="normal" title="Delete Folder">
-                                    <color key="titleColor" systemColor="systemRedColor"/>
-                                    <color key="titleShadowColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="deleteButtonAction:" destination="cD9-on-bVh" eventType="touchUpInside" id="l5u-9S-Bob"/>
-                                </connections>
-                            </button>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IDm-lx-ud1">
-                                <rect key="frame" x="0.0" y="126" width="414" height="45"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="NUC-qM-knh"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="rfU-WT-D4p"/>
-                        <color key="backgroundColor" systemColor="systemGray6Color"/>
-                        <constraints>
-                            <constraint firstItem="IDm-lx-ud1" firstAttribute="centerX" secondItem="0U9-sO-osI" secondAttribute="centerX" id="1xs-mr-Aeb"/>
-                            <constraint firstItem="IDm-lx-ud1" firstAttribute="top" secondItem="rfU-WT-D4p" secondAttribute="top" constant="38" id="9xK-KM-OhE"/>
-                            <constraint firstItem="IDm-lx-ud1" firstAttribute="leading" secondItem="KB1-Mu-78y" secondAttribute="leading" id="GRO-99-1et"/>
-                            <constraint firstItem="IDm-lx-ud1" firstAttribute="trailing" secondItem="KB1-Mu-78y" secondAttribute="trailing" id="Yc3-1X-l4X"/>
-                            <constraint firstItem="KB1-Mu-78y" firstAttribute="top" secondItem="IDm-lx-ud1" secondAttribute="bottom" constant="43" id="bY1-k1-Cfd"/>
-                            <constraint firstItem="IDm-lx-ud1" firstAttribute="leading" secondItem="rfU-WT-D4p" secondAttribute="leading" id="fMD-z5-pP4"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="6cN-9q-1Ku"/>
-                    <connections>
-                        <outlet property="nameField" destination="IDm-lx-ud1" id="ymn-MK-WFK"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3ih-dT-4R6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="6104.347826086957" y="99.776785714285708"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="J9u-qE-gBD">
             <objects>
@@ -229,24 +176,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MWm-Ta-0aZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="812" y="100"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="a8Q-p5-3Z0">
-            <objects>
-                <navigationController restorationIdentifier="RenameNav" storyboardIdentifier="RenameNav" automaticallyAdjustsScrollViewInsets="NO" id="GeJ-dN-mPP" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="GAw-Pg-EOC">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="cD9-on-bVh" kind="relationship" relationship="rootViewController" id="DnG-qh-Epc"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="GPy-5F-oUJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5194.202898550725" y="99.776785714285708"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="wnI-do-Mc7">
@@ -274,12 +203,6 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

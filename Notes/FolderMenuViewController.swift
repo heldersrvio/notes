@@ -25,6 +25,11 @@ class FolderMenuViewController: UITableViewController, UINavigationBarDelegate {
         cellsBackground.frame = CGRect(x: tableView.frame.minX + tableView.frame.width * 0.045, y: tableView.frame.minY + 15, width: tableView.frame.width / 1.1, height: tableView.frame.height / 7)
         cellsBackground.layer.zPosition = -1
         tableView.addSubview(cellsBackground)
+        /*cellsBackground.translatesAutoresizingMaskIntoConstraints = false
+        let cellsBackGroundWidthConstraint = NSLayoutConstraint(item: cellsBackground, attribute: .width, relatedBy: .equal, toItem: tableView, attribute: .width, multiplier: 1.2, constant: 0)
+        let cellsBackGroundTopConstraint = NSLayoutConstraint(item: cellsBackground, attribute: .top, relatedBy: .equal, toItem: tableView, attribute: .top, multiplier: 1, constant: 15)
+        let cellsBackGroundBottomConstraint = NSLayoutConstraint(item: cellsBackground, attribute: .bottom, relatedBy: .equal, toItem: tableView, attribute: .bottom, multiplier: 1, constant: -15)
+        tableView.addConstraints([cellsBackGroundWidthConstraint, cellsBackGroundTopConstraint, cellsBackGroundBottomConstraint])*/
         
         let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.close, target: self, action: #selector(close))
         navigationItem.rightBarButtonItem = button
@@ -37,10 +42,18 @@ class FolderMenuViewController: UITableViewController, UINavigationBarDelegate {
         let folderIcon = UIImageView()
         folderIcon.image = UIImage(systemName: "folder.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32, weight: .regular, scale: .large))?.withTintColor(UIColor(red: 0.88, green: 0.67, blue: 0, alpha: 1), renderingMode: .alwaysOriginal)
         let imageAspect = folderIcon.image!.size.width / folderIcon.image!.size.height
-        folderIcon.frame = CGRect(x: label.frame.origin.x - label.frame.size.height * 2.64, y: label.frame.origin.y - label.frame.size.height * 0.25, width: label.frame.size.height * 1.5 * imageAspect, height: label.frame.size.height * 1.5)
-        folderIcon.contentMode = UIView.ContentMode.scaleAspectFit
         navigationView.addSubview(label)
         navigationView.addSubview(folderIcon)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        folderIcon.translatesAutoresizingMaskIntoConstraints = false
+        let labelLeadingConstraint = NSLayoutConstraint(item: label, attribute: .leading, relatedBy: .equal, toItem: navigationView, attribute: .leading, multiplier: 1, constant: 30)
+        let labelVerticalConstraint = NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: navigationView, attribute: .centerY, multiplier: 1, constant: 0)
+        let verticalConstraint = NSLayoutConstraint(item: folderIcon, attribute: .centerY, relatedBy: .equal, toItem: navigationView, attribute: .centerY, multiplier: 1, constant: 0)
+        let widthConstraint = NSLayoutConstraint(item: folderIcon, attribute: .width, relatedBy: .equal, toItem: navigationView, attribute: .width, multiplier: 0, constant: label.frame.size.height * 1.5 * imageAspect)
+        let heightConstraint = NSLayoutConstraint(item: folderIcon, attribute: .height, relatedBy: .equal, toItem: navigationView, attribute: .height, multiplier: 0, constant: label.frame.size.height * 1.5)
+        let trailingConstraint = NSLayoutConstraint(item: folderIcon, attribute: .trailing, relatedBy: .equal, toItem: label, attribute: .leading, multiplier: 1, constant: -15)
+        navigationView.addConstraints([verticalConstraint, widthConstraint, heightConstraint, trailingConstraint, labelLeadingConstraint, labelVerticalConstraint])
+        
         navigationItem.titleView = navigationView
         navigationView.sizeToFit()
         tableView.tableFooterView = UIView()
@@ -57,11 +70,14 @@ class FolderMenuViewController: UITableViewController, UINavigationBarDelegate {
             let iconImageView = UIImageView()
             iconImageView.tintColor = UIColor.black
             iconImageView.image = indexPath.row == 0 ? UIImage(systemName: "folder.badge.plus") : indexPath.row == 1 ? UIImage(systemName: "pencil") : UIImage(systemName: "trash")
-            if let size = iconImageView.image?.size {
-                print(cell.contentView.frame.width)
-                iconImageView.frame = CGRect(x: cell.contentView.frame.minX + 270 - cell.contentView.frame.width / 22, y: cell.contentView.frame.midY - size.height / 2, width: size.width, height: size.height)
-            }
             cell.contentView.addSubview(iconImageView)
+            if let size = iconImageView.image?.size {
+                iconImageView.translatesAutoresizingMaskIntoConstraints = false
+                let verticalConstraint = NSLayoutConstraint(item: iconImageView, attribute: .centerY, relatedBy: .equal, toItem: cell.contentView, attribute: .centerY, multiplier: 1, constant: 0)
+                let trailingConstraint = NSLayoutConstraint(item: iconImageView, attribute: .trailing, relatedBy: .equal, toItem: cell.contentView, attribute: .trailing, multiplier: 1, constant: -20)
+                let widthConstraint = NSLayoutConstraint(item: iconImageView, attribute: .width, relatedBy: .equal, toItem: cell.contentView, attribute: .width, multiplier: 0, constant: size.width)
+                cell.contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint])
+            }
             return cell
         }
         return cell
