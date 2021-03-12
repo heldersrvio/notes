@@ -16,20 +16,21 @@ class FolderMenuViewController: UITableViewController, UINavigationBarDelegate {
     var deleteFolder: ((Int) -> Void)!
     let options = ["Add Folder", "Rename", "Delete"]
     
+    override func viewDidLayoutSubviews() {
+        let cellsBackground = UIView()
+        cellsBackground.backgroundColor = UIColor.white
+        cellsBackground.frame = CGRect(x: tableView.frame.minX + tableView.frame.width * 0.045, y: tableView.frame.minY + 15, width: tableView.frame.width / 1.1, height: tableView.contentSize.height - 30)
+        cellsBackground.layer.zPosition = -1
+        cellsBackground.isUserInteractionEnabled = false
+        cellsBackground.isMultipleTouchEnabled = false
+        tableView.addSubview(cellsBackground)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         tableView.backgroundColor = UIColor(red: 0.83, green: 0.83, blue: 0.83, alpha: 1)
-        let cellsBackground = UIView()
-        cellsBackground.backgroundColor = UIColor.white
-        cellsBackground.frame = CGRect(x: tableView.frame.minX + tableView.frame.width * 0.045, y: tableView.frame.minY + 15, width: tableView.frame.width / 1.1, height: tableView.frame.height / 7)
-        cellsBackground.layer.zPosition = -1
-        tableView.addSubview(cellsBackground)
-        /*cellsBackground.translatesAutoresizingMaskIntoConstraints = false
-        let cellsBackGroundWidthConstraint = NSLayoutConstraint(item: cellsBackground, attribute: .width, relatedBy: .equal, toItem: tableView, attribute: .width, multiplier: 1.2, constant: 0)
-        let cellsBackGroundTopConstraint = NSLayoutConstraint(item: cellsBackground, attribute: .top, relatedBy: .equal, toItem: tableView, attribute: .top, multiplier: 1, constant: 15)
-        let cellsBackGroundBottomConstraint = NSLayoutConstraint(item: cellsBackground, attribute: .bottom, relatedBy: .equal, toItem: tableView, attribute: .bottom, multiplier: 1, constant: -15)
-        tableView.addConstraints([cellsBackGroundWidthConstraint, cellsBackGroundTopConstraint, cellsBackGroundBottomConstraint])*/
+        
         
         let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.close, target: self, action: #selector(close))
         navigationItem.rightBarButtonItem = button
